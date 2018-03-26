@@ -3,7 +3,7 @@ import base64
 import json
 import sys
 import flask
-from flask import Flask, render_template, request, jsonify, request
+from flask import Flask, render_template, request, jsonify, request, send_from_directory
 from flask_pymongo import PyMongo
 from flask_restful import Resource, Api, reqparse
 import os
@@ -31,8 +31,8 @@ def form():
 
 class ImageUpload(Resource):
 	def post(self):
-		random_string = ''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(7)])
 		data = request.get_json()
+		random_string = data["latitude"] + "_" + data["longitude"]
 		image_data = data['image']
 		fh = open( os.path.join(UPLOAD_FOLDER,random_string+".jpg"), "wb")
 		fh.write(image_data.decode('base64'))
@@ -41,12 +41,15 @@ class ImageUpload(Resource):
 
 api.add_resource(ImageUpload, '/uploadimage')
 
+@app.route('/images/<string:name>')
+def getImage(name):
+	return send_from_directory('uploads', name)
 
 @app.route('/analyse/', methods = ['POST'])
 def core():
 	request_data = request.get_json()
 
-	random_string = ''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(7)])
+	random_string = data["latitude"] + "_" + data["longitude"]
 	image_data = request_data['image']
 	fh = open( os.path.join(UPLOAD_FOLDER,random_string+".jpg"), "wb")
 	fh.write(image_data.decode('base64'))
@@ -84,9 +87,6 @@ def core():
 	# r = requests.post('https://vision.googleapis.com/v1/images:annotate?key={}'.format(key), headers=headers , data = json.dumps(data))
     #
 	# r3 = requests.post('https://vision.googleapis.com/v1/images:annotate?key={}'.format(key), headers=headers , data = json.dumps(data3))
-	r = {}
-	r3 = {}
-
 
 	response_extraction = r.json()
 
@@ -107,7 +107,6 @@ def core():
 	data2 = {"q":text , "target":"en"}
 
 	# r2 = requests.post("https://translation.googleapis.com/language/translate/v2?key={}".format(key) , headers = headers , data = json.dumps(data2))
-	r2 = {	}
 	responspe_translated = r2.json()
 
 	interface_lang = responspe_translated["data"]["translations"][0]["translatedText"]

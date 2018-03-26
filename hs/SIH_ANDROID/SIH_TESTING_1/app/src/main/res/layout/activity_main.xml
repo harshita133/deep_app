@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.harshit.sih_testing_1.MainActivity">
+
+   <Button
+       android:layout_width="match_parent"
+       android:layout_height="100px"
+       android:text="Select Image"
+       android:id="@+id/slect_img"/>
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="100px"
+        android:layout_below="@+id/slect_img"
+        android:id="@+id/send"
+        android:text="Send"
+        />
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/send"
+        android:id="@+id/pasteventimageview"
+        />
+
+</RelativeLayout>

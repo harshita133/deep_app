@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Text Extractor</title>
+  <script type="text/javascript" src="{{ url_for('static', filename='jquery-2.1.3.min.js') }}"></script>
+</head>
+
+<body>
+<header class="navbar">
+  <form id="myForm">
+    <span>
+        Browse <input type="file" name="image" id="image" onchange="encodeImagetoBase64(this)">
+    </span>
+    <input type="submit" value="Upload your image" id="submit">
+    <a class="link" href=""></a>
+<script>
+      var a;
+      var data = {};
+      $('#submit').prop('disabled', true);
+      function encodeImagetoBase64(element){
+        var file = element.files[0];
+        var reader = new FileReader();
+        reader.onloadend = function() {
+            $('#submit').prop('disabled', false);
+            base64 = reader.result;
+            data['image'] = base64.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
+          }
+        reader.readAsDataURL(file);
+      }
+      $("#myForm").on('submit', function(e){
+        e.preventDefault();
+        console.log(data);
+          $.ajax({
+              url: 'http://127.0.0.1:5000/uploadimage', // url where to submit the request
+              type : "POST", // type of action POST || GET
+              contentType : 'application/json', // data type
+              data : JSON.stringify(data) //, post data || get data
+              // success : function(result) {
+              //     // you can see the result from the console
+              //     // tab of the developer tools
+              //     console.log(result);
+              // },
+              // error: function(xhr, resp, text) {
+              //     console.log(xhr, resp, text);
+              // }
+          })
+      });
+</script>
+
+</body>
+</html>

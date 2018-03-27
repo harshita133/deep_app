@@ -205,7 +205,8 @@ def core(i):
 
 	responspe_translated = r2.json()
 
-	interface_lang = responspe_translated["data"]["translations"][0]["translatedText"]
+	# interface_lang = responspe_translated["data"]["translations"][0]["translatedText"]
+
 	text = 'hi'
 	# interface_lang = 'school'
 	# label_ = ['education']

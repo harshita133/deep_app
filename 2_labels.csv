@@ -1,0 +1,9 @@
+,image,latitude,longitude,cluster,type,tags,Regional Lang,Translated Lang
+0,Hindi1.jpg,28.2041,77.3625,1,Educational_body,"['education', 'office']",hi,school university
+1,Hindi2.jpg,28.1041,77.2525,1,Educational_body,"['education', 'office']",hi,school university
+2,Hindi3.jpg,28.8041,77.1825,0,Educational_body,"['education', 'office']",hi,school university
+3,Hindi4.jpg,28.7041,77.1525,0,Educational_body,"['education', 'office']",hi,school university
+4,Hindi5.jpg,28.6041,77.4025,0,Educational_body,"['education', 'office']",hi,school university
+5,Hindi6.jpg,28.5041,77.3025,0,Educational_body,"['education', 'office']",hi,school university
+6,Tamil1.jpg,28.4041,77.1025,1,Educational_body,"['education', 'office']",hi,school university
+7,Tamil2.jpg,28.3041,77.2025,1,Educational_body,"['education', 'office']",hi,school university

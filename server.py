@@ -10,10 +10,10 @@ import os
 import random
 import string
 import pandas as pd
-from sklearn.feature_extraction.text import CountVectorizer
 import numpy as np
 from core import Core
 from ai import Ai
+from cluster import Cluster
 
 
 app = Flask(__name__)
@@ -30,6 +30,8 @@ mongo = PyMongo(app)
 df = pd.read_csv('test_dataset.csv' , sep=',')
 
 arr = df['image'].as_matrix()
+
+######################### APP ROUTES ##############################
 
 @app.route('/')
 def index():
@@ -55,13 +57,31 @@ api.add_resource(ImageUpload, '/uploadimage')
 def getImage(folder, image_name):
 	return send_from_directory(folder, image_name)
 
-# @app.route('/analyse/', methods = ['POST'])
+def cluster_analysis(cluster_index):
+
+	X = pd.read_csv('2_labels.csv',sep=',')
+
+	consi = X[X['cluster'] == cluster_index]
+
+	dic = np.unique(consi['type'].as_matrix() , return_counts = True)
+
+	result = {}
+
+	for i,j in zip(dic[0],dic[1]):
+		result[i] = j
+
+	return(result)
+
 
 
 for i in arr:
 	(text, extracted_lang, label_) = Core(i)
-	(find , aware ) = Ai(extracted_lang , label_)
-	print(find , aware)
+	(find , aware , type_ , certain_tag , awarness) = Ai(extracted_lang , label_)
+	# print(find , aware , certain_tag , awarness)
+
+print(cluster_analysis(1))
+
+# print(Cluster('test_dataset.csv',2))
 
 if __name__ == "__main__":
 	port = int(os.environ.get('PORT', 5000))

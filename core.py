@@ -1,3 +1,8 @@
+import requests
+import base64
+import json
+import sys
+
 def Core(i):
 
 	request_list = []
@@ -22,41 +27,41 @@ def Core(i):
 	            "image": content_json_obj
 	        })
 
-	headers = {'Content-Type': 'application/json'}
+	# headers = {'Content-Type': 'application/json'}
 
-	key = 'AIzaSyCdGTSZRnFVchzlNyTcZwwZQ_TQNXhq1As'
+	# key = 'AIzaSyCdGTSZRnFVchzlNyTcZwwZQ_TQNXhq1As'
 
-	data = {"requests":request_list}
+	# data = {"requests":request_list}
 
-	data3 = {"requests":request_list2}
+	# data3 = {"requests":request_list2}
 
 	# r = requests.post('https://vision.googleapis.com/v1/images:annotate?key={}'.format(key), headers=headers , data = json.dumps(data))
-    #
+    
 	# r3 = requests.post('https://vision.googleapis.com/v1/images:annotate?key={}'.format(key), headers=headers , data = json.dumps(data3))
 
-	response_extraction = r.json()
+	# response_extraction = r.json()
 
-	response_label = r3.json()
-	print("JSON Length")
+	# response_label = r3.json()
+	# print("JSON Length")
 
-	print(len(response_extraction['responses']))
+	# print(len(response_extraction['responses']))
 
-	labels = response_label['responses'][0]["labelAnnotations"]
+	# labels = response_label['responses'][0]["labelAnnotations"]
 
-	text = response_extraction['responses'][0]['textAnnotations'][0]['description']
+	# text = response_extraction['responses'][0]['textAnnotations'][0]['description']
 
-	label_ = []
+	# label_ = []
 
-	for label in labels:
-		label_.append(label["description"])
+	# for label in labels:
+	# 	label_.append(label["description"])
 
-	data2 = {"q":text , "target":"en"}
+	# data2 = {"q":text , "target":"en"}
 
 	# r2 = requests.post("https://translation.googleapis.com/language/translate/v2?key={}".format(key) , headers = headers , data = json.dumps(data2))
 
-	responspe_translated = r2.json()
+	# responspe_translated = r2.json()
 
-	interface_lang = responspe_translated["data"]["translations"][0]["translatedText"]
+	# interface_lang = responspe_translated["data"]["translations"][0]["translatedText"]
 	
 	#########################
 

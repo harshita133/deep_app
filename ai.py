@@ -1,3 +1,7 @@
+import pandas as pd
+import numpy as np
+from sklearn.feature_extraction.text import CountVectorizer
+
 def Ai(interface_lang, label_):
 
 	count = CountVectorizer()

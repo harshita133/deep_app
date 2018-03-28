@@ -1,3 +1,10 @@
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Feb  2 00:32:33 2018
+@author: rishab
+"""
+
 import requests
 import base64
 import json
@@ -66,8 +73,8 @@ def Core(i):
 	#########################
 
 	text = 'hi'
-	interface_lang = 'school'
-	label_ = ['education']
+	interface_lang = 'school university'
+	label_ = ['education' , 'office']
 
 	##########################
 

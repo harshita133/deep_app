@@ -74,7 +74,7 @@
 <script type="text/javascript">
 
 $.ajax({
-    url: 'http://127.0.0.1:5000/getmarkerjson', // url where to submit the request
+    url: 'http://192.168.43.24:5000/getmarkerjson', // url where to submit the request
     type : "GET", // type of action POST || GET
     contentType : 'application/json', // data type
     // data : JSON.stringify(data) //, post data || get data
@@ -228,7 +228,7 @@ show_map = function(geojson_data_with_image)
           placeholder.innerHTML = svgMarker;
 
           var el = placeholder.firstChild;
-          
+
           el.nextSibling.addEventListener('click', function () {
               map.flyTo({
                   center: marker.geometry.coordinates,

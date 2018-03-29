@@ -72,7 +72,7 @@ def Core(i):
 	
 	#########################
 
-	text = 'hi'
+	text = 'थिस इस टेस्ट'
 	interface_lang = 'school university'
 	label_ = ['education' , 'office']
 

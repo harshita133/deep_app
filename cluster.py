@@ -5,23 +5,33 @@ Created on Fri Feb  2 00:32:33 2018
 @author: rishab
 """
 
-from __future__ import print_function
+from __future__ import print_function, division
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_samples, silhouette_score
 import numpy as np
 import pandas as pd
 from ai import Ai
 from core import Core
+from cluster_analysis import Cluster_analysis
 
-# from sklearn.decomposition import PCA
-# import matplotlib.pyplot as plt
-# import matplotlib.cm as cm
+dict_ref = {'Educational_body':60 , 'Medical_body':3 , 'Pharmacy':10 , 'Water_supply_body':12 , 'Environment_management':1 , 'public_service_body':12 , 'Power / Energy Office':3 , 'LPG , Natural Gas station':10 , 'Fuel / Filling Station':40 , 'Transportational Asset':50 , 'awarness':5}
+population = 10000
+
+def sigmoid(x):
+    sigmoid_score = (1 / float(1 + np.exp(- x)))
+    return sigmoid_score
+
+def equation(dict_):
+	DI = 0
+	for tag in dict_:
+		DI += (dict_ref[tag]*(sigmoid((dict_[tag]/population)*(100000/dict_ref[tag]))))
+	return DI
 
 def Cluster(dataset_name , n_classes):
 
 	# n_classes = 2
 
-	X = pd.read_csv('test_dataset.csv',sep=',')
+	X = pd.read_csv('dataset.csv',sep=',')
 
 	X = X.dropna(axis = 0).reset_index()
 
@@ -42,6 +52,7 @@ def Cluster(dataset_name , n_classes):
 		extracted_tag.append(text)
 		translated_tag.append(extracted_lang)
 
+
 	X = X[['latitude','longitude']]
 
 	clusterer = KMeans(n_clusters= n_classes, random_state=1 , max_iter = 10000)
@@ -56,8 +67,31 @@ def Cluster(dataset_name , n_classes):
 
 	result = pd.concat([ name , df , df2 , df3 , df4 , df5 , df6 ] , axis = 1)
 
-	print(result)
-
 	result.to_csv('{}_labels.csv'.format(n_classes))
 
+	arr = []
+
+	for i in range(n_classes):
+		count = Cluster_analysis(i)
+		DI = equation(count)
+		print(DI)
+		df = pd.read_csv('{}_labels.csv'.format(n_classes) , sep = ",")
+		X = df[df['cluster'] == i]
+		l = len(X)
+		arr.append([round(DI,3)]*l)
+	arr_new = np.concatenate((arr[0],arr[1]), axis=0)
+	df_new = df.sort_values('cluster',ascending=True).reset_index()
+	df2 = pd.DataFrame(data = arr_new , columns = ['Dev_Index'])
+	result = pd.concat([df_new , df2] , axis = 1)
+	result = result.loc[:, ~result.columns.str.contains('^Unnamed')]
+	result = result.loc[:, ~result.columns.str.contains('^index')]
+	result.to_csv('{}_labels.csv'.format(n_classes))
+	print(result)
 	return result
+
+
+
+
+
+
+

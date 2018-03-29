@@ -11,7 +11,7 @@ csvfile = open('2_labels.csv', 'r')
 reader = csv.DictReader( csvfile )
 db = connection.arjuna
 db.image_info.drop()
-header= [ "", "latitude", "longitude", "image", "cluster", "type", "tags", "Regional Lang", "Translated Lang"]
+header= [ "", "latitude", "longitude", "image", "cluster", "type", "tags", "Regional Lang", "Translated Lang","Dev_Index"]
 
 for each in reader:
     row={}

@@ -73,8 +73,11 @@
 
 <script type="text/javascript">
 
+var abcdef ;
+
 $.ajax({
-    url: 'http://10.51.2.21:5000/getmarkerjson', // url where to submit the request
+
+    url: 'http://0.0.0.0:5000/getmarkerjson', // url where to submit the request
     type : "GET", // type of action POST || GET
     contentType : 'application/json', // data type
     // data : JSON.stringify(data) //, post data || get data
@@ -222,19 +225,22 @@ show_map = function(geojson_data_with_image)
       // ADD MARKERS TO MAP
       geojson.features.forEach(function (marker) {
           var svgMarker = renderMarker(marker);
-          console.log(marker.properties["image_id"]);
           // To get an actual DOM node instead of a string we append our marker to a dummy element and query it again with 'firstchild'. This way we retrieve a normal DOM node
           var placeholder = document.createElement('div');
           placeholder.innerHTML = svgMarker;
+
 
           var el = placeholder.firstChild;
 
           el.nextSibling.addEventListener('click', function () {
               map.flyTo({
                   center: marker.geometry.coordinates,
-                  zoom: 11
+                  zoom: 12
               });
           });
+
+
+          el.nextSibling.setAttribute("title_for_generative_report" , marker.properties["title"]);
 
           // Extend bounds with marker coordinates
           bounds.extend(marker.geometry.coordinates);
@@ -242,6 +248,7 @@ show_map = function(geojson_data_with_image)
           markers.push(el.nextSibling);
 
           new mapboxgl.Marker(el.nextSibling, { offset: [0, -30] }).setLngLat(marker.geometry.coordinates).addTo(map);
+
       });
 
       map.on('load', function (e) {
@@ -325,7 +332,11 @@ show_map = function(geojson_data_with_image)
 
 
           marker.addEventListener('click', function (event) {
-            console.log(this);
+
+            image_path_for_generative_report = this.getAttribute("title_for_generative_report")
+            console.log(image_path_for_generative_report);
+             window.location = "http://0.0.0.0:5000/imagescreen/" + image_path_for_generative_report
+
           });
 
           marker.addEventListener('mouseleave', function () {

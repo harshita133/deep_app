@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request, jsonify, request, send_from_directory
 from flask_pymongo import PyMongo
 from pprint import pprint
+import json
+from bson import BSON
+from bson import json_util
 
 app = Flask(__name__)
 
@@ -8,7 +11,7 @@ app.config['MONGO_DBNAME'] = 'arjuna'
 app.config['MONGO_URI'] = 'mongodb://localhost:27017/arjuna'
 mongo = PyMongo(app)
 
-ip = "192.168.43.24:5000"
+ip = "10.51.2.21:5000"
 
 @app.route('/markers')
 def init():
@@ -20,7 +23,6 @@ def getImage(folder, image_name):
 
 @app.route('/getmarkerjson')
 def sendjson():
-    print("---------------------------------")
     geojson = {
         "type": "FeatureCollection",
         "features": []
@@ -45,6 +47,12 @@ def sendjson():
         geojson["features"].append(image_obj)
     pprint(geojson)
     return jsonify(geojson)
+
+@app.route('/imagescreen/<string:image_name>')
+def imageScreen(image_name):
+    image_info = mongo.db.image_info
+    x = image_info.find_one({"image": image_name})
+    return json.dumps(x, sort_keys=True, indent=4, default=json_util.default)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')

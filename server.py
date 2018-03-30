@@ -22,6 +22,7 @@ app.config['SECRET_KEY'] = 'arjuna'
 api = Api(app)
 
 UPLOAD_FOLDER = os.path.basename('uploads')
+p3 = os.path.basename('p3')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 app.config['MONGO_DBNAME'] = 'arjuna'
@@ -41,10 +42,14 @@ def form():
 class ImageUpload(Resource):
 	def post(self):
 		data = request.get_json()
-		random_string = data["latitude"] + "_" + data["longitude"]
+		# random_string = data["latitude"] + "_" + data["longitude"]
+		random_string = "input"
 		image_data = data['image']
 		fh = open( os.path.join(UPLOAD_FOLDER,random_string+".jpg"), "wb")
+		fn = open( os.path.join(p3,random_string+".jpg"), "wb")
 		fh.write(image_data.decode('base64'))
+		fn.write(image_data.decode('base64'))
+		fn.close()
 		fh.close()
 		return "Image Uploaded"
 
@@ -57,4 +62,4 @@ def getImage(folder, image_name):
 new_ = Cluster('dataset.csv',2)
 
 if __name__ == "__main__":
-	app.run(host = '0.0.0.0', port = 5000, debug = True)
+	app.run(port = 5000, debug = True)

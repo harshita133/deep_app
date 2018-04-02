@@ -6,14 +6,37 @@
   <script type="text/javascript" src="{{ url_for('static', filename='jquery-2.1.3.min.js') }}"></script>
 </head>
 
+<style>
+  #image_result {
+    width: 100%;
+    height: auto;
+  }
+</style>
+
 <body>
 <header class="navbar">
   <form id="myForm">
     <span>
         Browse <input type="file" name="image" id="image" onchange="encodeImagetoBase64(this)">
     </span>
+    <span>Language:
+      <input type="checkbox" name="lan" value="Tamil">Tamil
+      <input type="checkbox" name="lan" value="Hindi" checked>Hindi<br>
+    </span>
+    <span>
+      Latitude: <input type="text" name="lat">
+    </span>
+    <span>
+      Longitude: <input type="text" name="lon">
+    </span>
     <input type="submit" value="Upload your image" id="submit">
-    <a class="link" href=""></a>
+  </form>
+  <div id="result">
+
+  </div>
+  <div id="image_result">
+  </div>
+</header>
 <script>
       var a;
       var data = {};
@@ -30,21 +53,40 @@
       }
       $("#myForm").on('submit', function(e){
         e.preventDefault();
+        data["lat"] = document.getElementsByName('lat')[0].value;
+        data["lon"] = document.getElementsByName('lon')[0].value;
+        input_obj = document.getElementsByName('lan');
+        for (i = 0; i < input_obj.length; i++) {
+        if (input_obj[i].checked === true) {
+          data["lan"] = input_obj[i].value;
+            console.log(input_obj[i].value);
+        }
+      }
         console.log(data);
+        // if(document.getElementsByName('lat')[0].value == "" || document.getElementsByName('lon')[0].value == ""){
+        //   alert('Fill All Details');
+        // }else{
+
           $.ajax({
-              url: 'http://127.0.0.1:5000/uploadimage', // url where to submit the request
+              url: 'http://0.0.0.0:5000/uploadimage', // url where to submit the request
               type : "POST", // type of action POST || GET
               contentType : 'application/json', // data type
-              data : JSON.stringify(data) //, post data || get data
-              // success : function(result) {
-              //     // you can see the result from the console
-              //     // tab of the developer tools
-              //     console.log(result);
-              // },
-              // error: function(xhr, resp, text) {
-              //     console.log(xhr, resp, text);
-              // }
+              data : JSON.stringify(data), //, post data || get data
+              success : function(result) {
+                  console.log(result);
+                  console.log(result.cluster);
+                  var temp = JSON.stringify(result);
+                  var element = document.getElementById("result");
+                  element.innerText = temp;
+                  $('#image_result').html('<img src="/static/test_img.jpg"/>');
+                  document.getElementById("image_result").children[0].setAttribute("width" , "60%");
+
+              },
+              error: function(xhr, resp, text) {
+                  console.log(xhr, resp, text);
+              }
           })
+        // }
       });
 </script>
 </body>

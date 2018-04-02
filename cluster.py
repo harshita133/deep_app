@@ -45,7 +45,7 @@ def Cluster(dataset_name , n_classes):
 	translated_tag = []
 
 	for i in arr:
-		(text, extracted_lang, label_) = Core(i)
+		(text, extracted_lang, label_) = Core(i, lan)
 		(find , aware , type_ , certain_tag , awarness) = Ai(extracted_lang , label_)
 		type_csv.append(type_)
 		tags_csv.append(str(label_))
@@ -88,10 +88,3 @@ def Cluster(dataset_name , n_classes):
 	result.to_csv('{}_labels.csv'.format(n_classes))
 	print(result)
 	return result
-
-
-
-
-
-
-

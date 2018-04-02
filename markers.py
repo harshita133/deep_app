@@ -20,9 +20,9 @@ from flask_pymongo import PyMongo
 from pprint import pprint
 from bson import BSON
 from bson import json_util
+import cv2 as cv
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'arjuna'
 api = Api(app)
 
 UPLOAD_FOLDER = os.path.basename('uploads')
@@ -44,19 +44,39 @@ def form():
     return render_template('form.html')
 
 class ImageUpload(Resource):
-	def post(self):
-		data = request.get_json()
-		random_string = "input"
-		image_data = data['image']
-		fh = open( os.path.join(UPLOAD_FOLDER,random_string+".jpg"), "wb")
-		fn = open( os.path.join(p3,random_string+".jpg"), "wb")
-		fh.write(image_data.decode('base64'))
-		fn.write(image_data.decode('base64'))
-		fn.close()
-		fh.close()
-		return "Image Uploaded"
+    def post(self):
+		print("Test")
+		i = "input.jpg"
+		lan = "hi"
+		text, interface_lang, label_ ,arr_all = Core(i,lan)
+		find , aware , type_ , certain_tag , awarness = Ai(interface_lang , label_)
+		img = cv.imread('p3/' + i)
+
+		for i in arr_all:
+			pts = np.array(i, np.int32)
+			pts = pts.reshape((-1,1,2))
+			cv.polylines(img,[pts],True,(0,0,255), 5)
+
+		cv.imwrite('static/test_img.jpg',img)
+		assign_cluster = 0
+		analysis = {"regional_language":str(text) , "translated_text": str(interface_lang) , "cluster":assign_cluster , "tags":label_ , "type":type_ }
+		print(analysis)
+		return jsonify(analysis)
 
 api.add_resource(ImageUpload, '/uploadimage')
+
+@app.route('/uploadstatic', methods = ['POST'])
+def postimage():
+	data = request.get_json()
+	image_data = data['image']
+	i = "input.jpg"
+	fh = open( os.path.join(UPLOAD_FOLDER,i), "wb")
+	fn = open( os.path.join(p3,i), "wb")
+	fh.write(image_data.decode('base64'))
+	fn.write(image_data.decode('base64'))
+	fh.close()
+	fn.close()
+	return jsonify({"message": "Image Uploaded"})
 
 @app.route('/markers')
 def init():
@@ -121,7 +141,9 @@ def a1():
 def a2():
     return render_template('styled histogram.html')
 
-new_ = Cluster('dataset.csv',2)
+@app.route('/resultimage')
+def getResultImage():
+	return send_from_directory('static', 'test_img.jpg')
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0' , debug = True)
+    app.run(host='0.0.0.0', port = 5000)
